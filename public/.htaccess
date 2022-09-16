@@ -1,4 +1,4 @@
 RewriteEngine on
-RewriteCond %{REQUEST_FILENAME} l-f
-RewriteCond %{REQUEST_FILENAME} l-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ /index.php?path=$1 [NC,L,QSA]  #All request to index.php
