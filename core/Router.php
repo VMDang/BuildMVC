@@ -24,10 +24,20 @@ class Router
         $method = strtolower($_SERVER['REQUEST_METHOD']);
         $view = $this->routes[$method][$url] ?? null;       // if $view not exists return $view = nul
 
+        if (is_array($view)){
+            call_user_func($view);
+            return;
+        }
+
         $this->renderView($view);
     }
 
-    public function renderView($view){
+    public function renderView($view, $params = []){
+
+        foreach ($params as $key => $value){
+            $$key = $value;
+        }
+
         ob_start();
         include BlogApplication::$VIEW_DIR."/_layout.php";
         $layout_content = ob_get_clean();

@@ -1,1 +1,3 @@
-<h1>Dang</h1>
+<h1>Show params</h1>
+
+<div><?php echo $username ?></div>
