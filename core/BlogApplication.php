@@ -23,4 +23,7 @@ class BlogApplication {
         $this->router->resolve();
     }
 
+    public function isLogin(){
+        return false;
+    }
 }

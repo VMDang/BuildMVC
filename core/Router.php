@@ -11,25 +11,37 @@ class Router
         $this->routes = [];
     }
 
-    public function get($path, $view){
-        $this->routes['get'][$path] = $view;
+    public function get($path, $callback, $middlewares = []){
+        $this->routes['get'][$path] = [
+            'callback'      => $callback,
+            'middlewares'    => $middlewares
+        ];
     }
 
-    public function post($path, $view){
-        $this->routes['post'][$path] = $view;
+    public function post($path, $callback, $middlewares = []){
+        $this->routes['post'][$path] = [
+            'callback'      => $callback,
+            'middlewares'    => $middlewares
+        ];
     }
 
     public function resolve(){
         $url = $_SERVER['REQUEST_URI'];
         $method = strtolower($_SERVER['REQUEST_METHOD']);
-        $view = $this->routes[$method][$url] ?? null;       // if $view not exists return $view = nul
+        $route_config = $this->routes[$method][$url] ?? null;       // if $view not exists return $view = nul
 
-        if (is_array($view)){
-            call_user_func($view);
+        $middlewares = $route_config['middlewares'];
+        foreach ($middlewares as $middleware){
+            $middleware->handle();
+        }
+
+        $callback = $route_config['callback'];
+        if (is_array($callback)){
+            call_user_func($callback);
             return;
         }
 
-        $this->renderView($view);
+        $this->renderView($callback);
     }
 
     public function renderView($view, $params = []){
