@@ -2,6 +2,7 @@
 
 namespace controllers;
 
+use models\User;
 use core\Controller;
 
 class LoginController extends Controller
@@ -11,9 +12,18 @@ class LoginController extends Controller
     }
 
     public function handleLogin(){
-        $name = $this->getData()['name'];
-        $name = 'Welcome ' . $name;
-        return $this->renderView('home', ['username' => $name]);
+
+        $user = new User();
+        $user->loadData($this->getData());
+        return $this->renderView('home', ['user' => $user]);
+    }
+
+    public function register(){
+        $user = new User();
+        $user->loadData($this->getData());
+        $user->validate();
+
+        return $this->renderView('register', ['user' => $user, 'errors' => $user->errors]);
     }
 
 }
