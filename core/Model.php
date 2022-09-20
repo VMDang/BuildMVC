@@ -44,4 +44,24 @@ abstract class Model
             $this->errors[] = "$attr: this field is an email";
         }
     }
+
+    protected abstract function table();
+    protected abstract function columns();
+
+    public function save(){
+        $table = $this->table();
+        $columns = $this->columns();
+        $values = array_map(function ($c){
+            return $this->{$c};
+            }, $columns);
+        $values = array_map(function ($v){
+            return "'$v'";
+        }, $values);
+
+        $columns = implode(',', $columns);
+        $values = implode(',', $values);
+        $query = "INSERT INTO $table($columns) VALUES ($values)";
+
+        return BlogApplication::$app->db->pdo->exec($query);
+    }
 }

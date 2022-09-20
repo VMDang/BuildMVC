@@ -18,12 +18,18 @@ class LoginController extends Controller
         return $this->renderView('home', ['user' => $user]);
     }
 
-    public function register(){
+    public function register()
+    {
         $user = new User();
         $user->loadData($this->getData());
         $user->validate();
-
-        return $this->renderView('register', ['user' => $user, 'errors' => $user->errors]);
+        if (count($user->errors) > 0) {
+            return $this->renderView('register', ['user' => $user, 'errors' => $user->errors]);
+        }
+        if (!$user->save()) {
+            $user->errors[] = 'database failure';
+            return $this->renderView('register', ['user' => $user, 'errors' => $user->errors]);
+        }
+        return $this->renderView('home', ['user' => $user]);
     }
-
 }
