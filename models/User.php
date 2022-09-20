@@ -22,4 +22,14 @@ class User extends Model
             'password' => [static::RULE_REQUIRED]
         ];
     }
+
+    protected function table()
+    {
+        return 'users';
+    }
+
+    protected function columns()
+    {
+        return ['name', 'email', 'password'];
+    }
 }

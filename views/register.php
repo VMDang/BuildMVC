@@ -37,7 +37,10 @@
         <div class="form-field">
             <div class="form-error">
                 <?php
-                    if (count($errors) > 0){
+                    if (!isset($errors)){
+
+                    }
+                    else if (count($errors) > 0){
                         echo $errors[0];
                     }else{
                         echo 'Successful';

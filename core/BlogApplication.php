@@ -9,6 +9,8 @@ class BlogApplication {
 
     public static $app;
 
+    public $user;
+
     public function __construct()
     {
         static::$ROOT_DIR = dirname(__DIR__);
@@ -16,14 +18,14 @@ class BlogApplication {
 
         static::$app = $this;
         $this->router = new Router();
+        $this->db = new Database();
     }
 
     public function run(){
-
         $this->router->resolve();
     }
 
     public function isLogin(){
-        return false;
+        return $this->user != null;
     }
 }
